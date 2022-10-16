@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Lights Out</title>
+<style>
+.lit {
+    background-color: lightblue;
+}
+</style>
+</head>
+<body>
+    <table id="main_table" border="1" style="border-collapse: collapse" width="500px" height="500px">
+    </table>
+<script>
+
+var main_table = document.getElementById('main_table');
+
+// 表の論理サイズ決定
+var length_x = 5;
+var length_y = 5;
+
+// 表作成
+for(i=0; i<length_x; i++){
+    var rows = main_table.insertRow(-1);
+    rows.setAttribute('id', i);
+    for(j=0; j<length_y; j++){
+        var cell = rows.insertCell(-1);
+        cell.setAttribute('id', i +'_'+ j );
+        cell.setAttribute('data-x', i);
+        cell.setAttribute('data-y', j);
+        cell.addEventListener('click', move, false)
+    }
+}
+
+// 一手の動き作成
+function move(){
+    var here_x = parseInt(this.dataset.x);
+    var here_y = parseInt(this.dataset.y);
+
+    right_y = (here_y + 1 + length_y) % length_y;
+    if( right_y == 0 ){
+        right_x = (length_x - 1) - here_x;
+    } else {
+        right_x = here_x;
+    }
+
+    left_y = (here_y - 1 + length_y) % length_y;
+    if( left_y == length_y - 1 ){
+        left_x = (length_x - 1) - here_x;
+    } else {
+        left_x = here_x;
+    }
+
+
+    up_x = here_x - 1;
+    up_y = here_y;
+    down_x = here_x + 1;
+    down_y = here_y;
+
+    // 押した場所の色を変える
+    this.classList.toggle('lit');
+    
+    // 右隣の色を変える
+        document.getElementById( right_x + '_' + right_y ).classList.toggle('lit');
+
+    // 左隣の色を変える
+        document.getElementById( left_x + '_' + left_y ).classList.toggle('lit');
+
+    // 上隣の色を変える
+    if ( 0 <= up_x ) {
+        document.getElementById( up_x + '_' + up_y ).classList.toggle('lit');
+    }
+
+    // 下隣の色を変える
+    if ( down_x < length_x ) {
+        document.getElementById( down_x + '_' + down_y ).classList.toggle('lit');
+    }
+
+}
+
+
+
+</script>    
+</body>
+</html>
+
